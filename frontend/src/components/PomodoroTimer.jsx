@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
-import { Play, Pause, RotateCcw, Settings, Volume2 } from "lucide-react";
+import { Badge } from "./ui/badge";
+import { Play, Pause, RotateCcw, Volume2, VolumeX, Sparkles } from "lucide-react";
 import { useToast } from "../hooks/use-toast";
 
 const PomodoroTimer = ({ settings, currentSession, onSessionComplete }) => {
@@ -10,6 +11,7 @@ const PomodoroTimer = ({ settings, currentSession, onSessionComplete }) => {
   const [sessionType, setSessionType] = useState("focus"); // focus, shortBreak, longBreak
   const [sessionsCompleted, setSessionsCompleted] = useState(0);
   const [progress, setProgress] = useState(0);
+  const [soundEnabled, setSoundEnabled] = useState(true);
   const intervalRef = useRef(null);
   const { toast } = useToast();
 
@@ -41,8 +43,13 @@ const PomodoroTimer = ({ settings, currentSession, onSessionComplete }) => {
   const handleSessionComplete = () => {
     setIsRunning(false);
     
-    // Play completion sound (mock for now)
-    playCompletionSound();
+    // Play completion sound
+    if (soundEnabled) {
+      playCompletionSound();
+    }
+    
+    // Visual celebration
+    celebrateCompletion();
     
     if (sessionType === "focus") {
       setSessionsCompleted(prev => prev + 1);
@@ -54,7 +61,7 @@ const PomodoroTimer = ({ settings, currentSession, onSessionComplete }) => {
       
       toast({
         title: "🍅 Focus Session Complete!",
-        description: "Great work! Time for a break.",
+        description: "Excellent work! Time for a well-deserved break.",
       });
       
       // Auto-switch to break
@@ -65,7 +72,7 @@ const PomodoroTimer = ({ settings, currentSession, onSessionComplete }) => {
     } else {
       toast({
         title: "☕ Break Complete!",
-        description: "Ready for another focus session?",
+        description: "Refreshed and ready for another focus session?",
       });
       
       setSessionType("focus");
@@ -78,6 +85,37 @@ const PomodoroTimer = ({ settings, currentSession, onSessionComplete }) => {
   const playCompletionSound = () => {
     // Mock implementation - will be replaced with actual audio
     console.log("🔔 Timer completion sound played!");
+    // Create a simple beep sound using Web Audio API
+    try {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.frequency.value = 800;
+      oscillator.type = 'sine';
+      
+      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
+      
+      oscillator.start();
+      oscillator.stop(audioContext.currentTime + 1);
+    } catch (error) {
+      console.log("Audio not supported");
+    }
+  };
+
+  const celebrateCompletion = () => {
+    // Add visual celebration effect
+    const timer = document.querySelector('.timer-container');
+    if (timer) {
+      timer.classList.add('celebration');
+      setTimeout(() => {
+        timer.classList.remove('celebration');
+      }, 1000);
+    }
   };
 
   const toggleTimer = () => {
@@ -99,42 +137,67 @@ const PomodoroTimer = ({ settings, currentSession, onSessionComplete }) => {
     return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
-  const getSessionColor = () => {
+  const getSessionData = () => {
     switch (sessionType) {
       case "focus":
-        return "text-orange-500";
+        return {
+          label: "Focus Time",
+          color: "text-orange-500",
+          bgColor: "from-orange-500 to-orange-600",
+          borderColor: "border-orange-500/30"
+        };
       case "shortBreak":
-        return "text-green-500";
+        return {
+          label: "Short Break",
+          color: "text-green-500",
+          bgColor: "from-green-500 to-green-600",
+          borderColor: "border-green-500/30"
+        };
       case "longBreak":
-        return "text-blue-500";
+        return {
+          label: "Long Break",
+          color: "text-blue-500",
+          bgColor: "from-blue-500 to-blue-600",
+          borderColor: "border-blue-500/30"
+        };
       default:
-        return "text-orange-500";
+        return {
+          label: "Focus Time",
+          color: "text-orange-500",
+          bgColor: "from-orange-500 to-orange-600",
+          borderColor: "border-orange-500/30"
+        };
     }
   };
 
-  const getSessionLabel = () => {
-    switch (sessionType) {
-      case "focus":
-        return "Focus Time";
-      case "shortBreak":
-        return "Short Break";
-      case "longBreak":
-        return "Long Break";
-      default:
-        return "Focus Time";
-    }
-  };
+  const sessionData = getSessionData();
+  const circumference = 2 * Math.PI * 45;
+  const strokeDasharray = circumference;
+  const strokeDashoffset = circumference - (progress / 100) * circumference;
 
   return (
-    <Card className="p-8 bg-gray-800 border-gray-700 text-center">
+    <Card className={`timer-container p-8 bg-gray-800/50 border-gray-700 backdrop-blur-sm shadow-2xl transition-all duration-300 ${sessionData.borderColor}`}>
       <div className="flex flex-col items-center space-y-6">
-        {/* Session Type */}
-        <div className={`text-lg font-medium ${getSessionColor()}`}>
-          {getSessionLabel()}
+        {/* Session Type & Status */}
+        <div className="flex items-center justify-between w-full">
+          <Badge variant="outline" className={`${sessionData.color} border-current px-3 py-1`}>
+            {sessionData.label}
+          </Badge>
+          
+          <div className="flex items-center space-x-2">
+            <Button
+              onClick={() => setSoundEnabled(!soundEnabled)}
+              variant="ghost"
+              size="sm"
+              className="text-gray-400 hover:text-white"
+            >
+              {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+            </Button>
+          </div>
         </div>
         
         {/* Circular Timer */}
-        <div className="relative w-64 h-64">
+        <div className="relative w-80 h-80">
           <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
             {/* Background circle */}
             <circle
@@ -143,7 +206,7 @@ const PomodoroTimer = ({ settings, currentSession, onSessionComplete }) => {
               r="45"
               fill="none"
               stroke="currentColor"
-              strokeWidth="6"
+              strokeWidth="3"
               className="text-gray-700"
             />
             
@@ -156,62 +219,115 @@ const PomodoroTimer = ({ settings, currentSession, onSessionComplete }) => {
               stroke="currentColor"
               strokeWidth="6"
               strokeLinecap="round"
-              strokeDasharray={`${2 * Math.PI * 45}`}
-              strokeDashoffset={`${2 * Math.PI * 45 * (1 - progress / 100)}`}
-              className={sessionType === "focus" ? "text-orange-500" : 
-                        sessionType === "shortBreak" ? "text-green-500" : 
-                        "text-blue-500"}
+              strokeDasharray={strokeDasharray}
+              strokeDashoffset={strokeDashoffset}
+              className={sessionData.color}
               style={{
-                transition: "stroke-dashoffset 1s linear"
+                transition: "stroke-dashoffset 1s linear",
+                filter: "drop-shadow(0 0 8px currentColor)"
               }}
             />
             
-            {/* Accent notches */}
-            {[0, 90, 180, 270].map((angle) => (
+            {/* Accent notches at cardinal points */}
+            {[0, 90, 180, 270].map((angle, index) => (
+              <circle
+                key={angle}
+                cx={50 + 42 * Math.cos((angle * Math.PI) / 180)}
+                cy={50 + 42 * Math.sin((angle * Math.PI) / 180)}
+                r="2"
+                fill="currentColor"
+                className={`${sessionData.color} opacity-60`}
+              />
+            ))}
+            
+            {/* Hour markers */}
+            {Array.from({ length: 12 }, (_, i) => i * 30).map((angle) => (
               <circle
                 key={angle}
                 cx={50 + 40 * Math.cos((angle * Math.PI) / 180)}
                 cy={50 + 40 * Math.sin((angle * Math.PI) / 180)}
-                r="2"
+                r="1"
                 fill="currentColor"
-                className="text-gray-500"
+                className="text-gray-600"
               />
             ))}
           </svg>
           
           {/* Time Display */}
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <div className="text-4xl font-bold text-white mb-2">
+            <div className="text-6xl font-black text-white mb-2 font-mono tracking-tight">
               {formatTime(timeLeft)}
             </div>
-            <div className="text-sm text-gray-400">
+            <div className="text-lg text-gray-400 mb-2 font-medium">
               Session {sessionsCompleted + 1}
             </div>
+            {progress > 0 && (
+              <div className={`text-sm ${sessionData.color} font-medium`}>
+                {Math.round(progress)}% Complete
+              </div>
+            )}
           </div>
         </div>
         
         {/* Control Buttons */}
-        <div className="flex space-x-4">
+        <div className="flex items-center space-x-4">
           <Button
             onClick={toggleTimer}
             size="lg"
-            className={`${sessionType === "focus" ? "bg-orange-600 hover:bg-orange-700" : 
-                       sessionType === "shortBreak" ? "bg-green-600 hover:bg-green-700" : 
-                       "bg-blue-600 hover:bg-blue-700"}`}
+            className={`px-8 py-3 bg-gradient-to-r ${sessionData.bgColor} hover:shadow-lg transform hover:scale-105 transition-all duration-200`}
           >
-            {isRunning ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
+            {isRunning ? (
+              <>
+                <Pause className="w-6 h-6 mr-2" />
+                Pause
+              </>
+            ) : (
+              <>
+                <Play className="w-6 h-6 mr-2" />
+                Start
+              </>
+            )}
           </Button>
           
           <Button
             onClick={resetTimer}
             variant="outline"
             size="lg"
-            className="border-gray-600 hover:bg-gray-700"
+            className="border-gray-600 hover:bg-gray-700 px-6 py-3"
           >
-            <RotateCcw className="w-5 h-5" />
+            <RotateCcw className="w-5 h-5 mr-2" />
+            Reset
           </Button>
         </div>
+        
+        {/* Session Progress Indicator */}
+        <div className="flex items-center space-x-2">
+          {Array.from({ length: 4 }, (_, i) => (
+            <div
+              key={i}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                i < sessionsCompleted
+                  ? `bg-gradient-to-r ${sessionData.bgColor} shadow-md`
+                  : "bg-gray-600"
+              }`}
+            />
+          ))}
+          <span className="text-sm text-gray-400 ml-2">
+            {sessionsCompleted}/4 cycles
+          </span>
+        </div>
       </div>
+      
+      <style jsx>{`
+        .timer-container.celebration {
+          animation: celebration 1s ease-in-out;
+        }
+        
+        @keyframes celebration {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.05); }
+        }
+      `}</style>
     </Card>
   );
 };

@@ -4,6 +4,7 @@ import ProgressBar from "./ProgressBar";
 import StreakCalendar from "./StreakCalendar";
 import DailyTasks from "./DailyTasks";
 import TimerSettings from "./TimerSettings";
+import DashboardHeader from "./DashboardHeader";
 import { mockData } from "../utils/mockData";
 
 const Dashboard = () => {
@@ -14,45 +15,30 @@ const Dashboard = () => {
   const [dailyTasks, setDailyTasks] = useState(mockData.dailyTasks);
   const [showSettings, setShowSettings] = useState(false);
 
+  const completedTasks = dailyTasks.filter(task => task.completed).length;
+  const allTasksComplete = completedTasks === dailyTasks.length;
+  const goalReached = dailyProgress.completedSessions >= timerSettings.dailyTarget;
+  const streakEligible = allTasksComplete && goalReached;
+
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-4">
-      <div className="max-w-7xl mx-auto">
-        {/* Progress Bar */}
-        <ProgressBar 
-          dailyProgress={dailyProgress} 
-          timerSettings={timerSettings}
-        />
+    <div className="min-h-screen bg-gray-900 text-white">
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        {/* Dashboard Header */}
+        <DashboardHeader />
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
-          {/* Left Column - Calendar */}
-          <div className="lg:col-span-1">
-            <StreakCalendar streakData={streakData} />
-          </div>
-          
-          {/* Center Column - Timer */}
-          <div className="lg:col-span-1 flex flex-col items-center">
-            <PomodoroTimer 
-              settings={timerSettings}
-              currentSession={currentSession}
-              onSessionComplete={(sessionData) => {
-                setDailyProgress(prev => ({
-                  ...prev,
-                  completedSessions: prev.completedSessions + 1,
-                  totalStudyTime: prev.totalStudyTime + sessionData.duration
-                }));
-              }}
-            />
-            
-            <TimerSettings 
-              settings={timerSettings}
-              onSettingsChange={setTimerSettings}
-              isOpen={showSettings}
-              onToggle={() => setShowSettings(!showSettings)}
-            />
-          </div>
-          
-          {/* Right Column - Daily Tasks */}
-          <div className="lg:col-span-1">
+        {/* Progress Stats Bar */}
+        <div className="mt-6">
+          <ProgressBar 
+            dailyProgress={dailyProgress} 
+            timerSettings={timerSettings}
+            streakEligible={streakEligible}
+          />
+        </div>
+        
+        {/* Main Dashboard Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-8">
+          {/* Left Column - Daily Tasks */}
+          <div className="lg:col-span-4">
             <DailyTasks 
               tasks={dailyTasks}
               onTaskToggle={(taskId) => {
@@ -64,6 +50,42 @@ const Dashboard = () => {
                   )
                 );
               }}
+            />
+          </div>
+          
+          {/* Center Column - Timer */}
+          <div className="lg:col-span-4 flex flex-col items-center space-y-6">
+            {/* Timer Settings Above Timer */}
+            <div className="w-full">
+              <TimerSettings 
+                settings={timerSettings}
+                onSettingsChange={setTimerSettings}
+                isCompact={true}
+              />
+            </div>
+            
+            {/* Pomodoro Timer */}
+            <PomodoroTimer 
+              settings={timerSettings}
+              currentSession={currentSession}
+              onSessionComplete={(sessionData) => {
+                setDailyProgress(prev => ({
+                  ...prev,
+                  completedSessions: prev.completedSessions + 1,
+                  totalStudyTime: prev.totalStudyTime + sessionData.duration
+                }));
+              }}
+            />
+          </div>
+          
+          {/* Right Column - Calendar */}
+          <div className="lg:col-span-4">
+            <StreakCalendar 
+              streakData={streakData} 
+              dailyProgress={dailyProgress}
+              timerSettings={timerSettings}
+              completedTasks={completedTasks}
+              totalTasks={dailyTasks.length}
             />
           </div>
         </div>
