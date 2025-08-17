@@ -4,20 +4,46 @@ import ProgressBar from "./ProgressBar";
 import StreakCalendar from "./StreakCalendar";
 import DailyTasks from "./DailyTasks";
 import DashboardHeader from "./DashboardHeader";
+import DashboardNav from "./DashboardNav";
 import { mockData } from "../utils/mockData";
+import { motion } from "framer-motion";
 
 const Dashboard = () => {
-  const [timerSettings, setTimerSettings] = useState(mockData.defaultSettings);
+  const [timerSettings, setTimerSettings] = useState(() => {
+    const saved = localStorage.getItem('focusflame-timer-settings');
+    return saved ? JSON.parse(saved) : mockData.defaultSettings;
+  });
+  
   const [currentSession, setCurrentSession] = useState(mockData.currentSession);
-  const [dailyProgress, setDailyProgress] = useState(mockData.dailyProgress);
-  const [streakData, setStreakData] = useState(mockData.streakData);
+  
+  const [dailyProgress, setDailyProgress] = useState(() => {
+    const saved = localStorage.getItem('focusflame-daily-progress');
+    return saved ? JSON.parse(saved) : mockData.dailyProgress;
+  });
+  
+  const [streakData, setStreakData] = useState(() => {
+    const saved = localStorage.getItem('focusflame-streak-data');
+    return saved ? JSON.parse(saved) : mockData.streakData;
+  });
+  
   const [dailyTasks, setDailyTasks] = useState(() => {
-    // Load tasks from localStorage or use default
     const savedTasks = localStorage.getItem('focusflame-daily-tasks');
     return savedTasks ? JSON.parse(savedTasks) : mockData.dailyTasks;
   });
 
-  // Save tasks to localStorage whenever they change
+  // Save data to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('focusflame-timer-settings', JSON.stringify(timerSettings));
+  }, [timerSettings]);
+
+  useEffect(() => {
+    localStorage.setItem('focusflame-daily-progress', JSON.stringify(dailyProgress));
+  }, [dailyProgress]);
+
+  useEffect(() => {
+    localStorage.setItem('focusflame-streak-data', JSON.stringify(streakData));
+  }, [streakData]);
+
   useEffect(() => {
     localStorage.setItem('focusflame-daily-tasks', JSON.stringify(dailyTasks));
   }, [dailyTasks]);
@@ -71,25 +97,49 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <motion.div 
+      className="min-h-screen bg-gray-900 text-white"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
       <div className="max-w-7xl mx-auto px-4 py-6">
+        {/* Dashboard Navigation */}
+        <DashboardNav />
+        
         {/* Dashboard Header */}
-        <DashboardHeader />
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+        >
+          <DashboardHeader />
+        </motion.div>
         
         {/* Progress Stats Bar */}
-        <div className="mt-6">
+        <motion.div 
+          className="mt-6"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
           <ProgressBar 
             dailyProgress={dailyProgress} 
             timerSettings={timerSettings}
             streakEligible={streakEligible}
             totalTasks={dailyTasks.length}
           />
-        </div>
+        </motion.div>
         
         {/* Main Dashboard Grid - Horizontal Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
           {/* Left Column - Daily Tasks */}
-          <div className="lg:col-span-1">
+          <motion.div 
+            className="lg:col-span-1"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
             <DailyTasks 
               tasks={dailyTasks}
               onTaskToggle={handleTaskToggle}
@@ -98,10 +148,15 @@ const Dashboard = () => {
               onTaskDelete={handleTaskDelete}
               onTaskReorder={handleTaskReorder}
             />
-          </div>
+          </motion.div>
           
           {/* Center Column - Timer */}
-          <div className="lg:col-span-1 flex flex-col items-center justify-start">
+          <motion.div 
+            className="lg:col-span-1 flex flex-col items-center justify-start"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          >
             <PomodoroTimer 
               settings={timerSettings}
               currentSession={currentSession}
@@ -114,10 +169,15 @@ const Dashboard = () => {
                 }));
               }}
             />
-          </div>
+          </motion.div>
           
           {/* Right Column - Calendar */}
-          <div className="lg:col-span-1">
+          <motion.div 
+            className="lg:col-span-1"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+          >
             <StreakCalendar 
               streakData={streakData} 
               dailyProgress={dailyProgress}
@@ -125,10 +185,10 @@ const Dashboard = () => {
               completedTasks={completedTasks}
               totalTasks={dailyTasks.length}
             />
-          </div>
+          </motion.div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
