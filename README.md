@@ -1,4 +1,5 @@
-## Rhythmify - The ultimate dark-mode productivity dashboard combining Pomodoro sessions, habit streaks, and daily focus tasks.
+## Rhythmify 
+The ultimate dark-mode productivity dashboard combining Pomodoro sessions, habit streaks, and daily focus tasks.
 
 # Demo
 https://habit-hero-26.preview.emergentagent.com/
