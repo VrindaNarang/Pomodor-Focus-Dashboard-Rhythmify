@@ -69,7 +69,7 @@ export const mockData = {
     ['2025-01-01']: true,
   },
 
-  // Daily tasks checklist
+  // Default daily tasks (now customizable by user)
   dailyTasks: [
     {
       id: "dsa",
