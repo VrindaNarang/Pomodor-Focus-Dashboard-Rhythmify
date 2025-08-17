@@ -21,7 +21,7 @@ Responsive & Accessible:
 Fluid layout on desktop, laptop, tablet, and mobile.
 Keyboard navigable and screen-reader ready.
 
-🛠️ Tech Stack
+## Tech Stack
 React 19 with Framer Motion
 Supabase (auth, DB, and storage)
 Vercel / Netlify (frontend hosting)
