@@ -10,42 +10,42 @@ import { motion } from "framer-motion";
 
 const Dashboard = () => {
   const [timerSettings, setTimerSettings] = useState(() => {
-    const saved = localStorage.getItem('focusflame-timer-settings');
+    const saved = localStorage.getItem('rhythmify-timer-settings');
     return saved ? JSON.parse(saved) : mockData.defaultSettings;
   });
   
   const [currentSession, setCurrentSession] = useState(mockData.currentSession);
   
   const [dailyProgress, setDailyProgress] = useState(() => {
-    const saved = localStorage.getItem('focusflame-daily-progress');
+    const saved = localStorage.getItem('rhythmify-daily-progress');
     return saved ? JSON.parse(saved) : mockData.dailyProgress;
   });
   
   const [streakData, setStreakData] = useState(() => {
-    const saved = localStorage.getItem('focusflame-streak-data');
+    const saved = localStorage.getItem('rhythmify-streak-data');
     return saved ? JSON.parse(saved) : mockData.streakData;
   });
   
   const [dailyTasks, setDailyTasks] = useState(() => {
-    const savedTasks = localStorage.getItem('focusflame-daily-tasks');
+    const savedTasks = localStorage.getItem('rhythmify-daily-tasks');
     return savedTasks ? JSON.parse(savedTasks) : mockData.dailyTasks;
   });
 
   // Save data to localStorage whenever they change
   useEffect(() => {
-    localStorage.setItem('focusflame-timer-settings', JSON.stringify(timerSettings));
+    localStorage.setItem('rhythmify-timer-settings', JSON.stringify(timerSettings));
   }, [timerSettings]);
 
   useEffect(() => {
-    localStorage.setItem('focusflame-daily-progress', JSON.stringify(dailyProgress));
+    localStorage.setItem('rhythmify-daily-progress', JSON.stringify(dailyProgress));
   }, [dailyProgress]);
 
   useEffect(() => {
-    localStorage.setItem('focusflame-streak-data', JSON.stringify(streakData));
+    localStorage.setItem('rhythmify-streak-data', JSON.stringify(streakData));
   }, [streakData]);
 
   useEffect(() => {
-    localStorage.setItem('focusflame-daily-tasks', JSON.stringify(dailyTasks));
+    localStorage.setItem('rhythmify-daily-tasks', JSON.stringify(dailyTasks));
   }, [dailyTasks]);
 
   const completedTasks = dailyTasks.filter(task => task.completed).length;

@@ -16,13 +16,13 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     // Check for existing authentication on app load
-    const storedUser = localStorage.getItem('focusflame-user');
+    const storedUser = localStorage.getItem('rhythmify-user');
     if (storedUser) {
       try {
         setUser(JSON.parse(storedUser));
       } catch (error) {
         console.error('Error parsing stored user:', error);
-        localStorage.removeItem('focusflame-user');
+        localStorage.removeItem('rhythmify-user');
       }
     }
     setLoading(false);
@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
       };
 
       setUser(userData);
-      localStorage.setItem('focusflame-user', JSON.stringify(userData));
+      localStorage.setItem('rhythmify-user', JSON.stringify(userData));
       return { success: true, user: userData };
     } catch (error) {
       return { success: false, error: error.message };
@@ -69,7 +69,7 @@ export const AuthProvider = ({ children }) => {
       };
 
       setUser(userData);
-      localStorage.setItem('focusflame-user', JSON.stringify(userData));
+      localStorage.setItem('rhythmify-user', JSON.stringify(userData));
       return { success: true, user: userData };
     } catch (error) {
       return { success: false, error: error.message };
@@ -80,10 +80,10 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('focusflame-user');
-    localStorage.removeItem('focusflame-daily-tasks'); // Clear tasks on logout
-    localStorage.removeItem('focusflame-timer-settings');
-    localStorage.removeItem('focusflame-progress');
+    localStorage.removeItem('rhythmify-user');
+    localStorage.removeItem('rhythmify-daily-tasks'); // Clear tasks on logout
+    localStorage.removeItem('rhythmify-timer-settings');
+    localStorage.removeItem('rhythmify-progress');
   };
 
   const value = {
