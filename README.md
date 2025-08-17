@@ -3,7 +3,7 @@
 # Demo
 https://habit-hero-26.preview.emergentagent.com/
 ## Features
-Modern Dark-Mode UI: Clean, visually stunning design with a focus on usability and accessibility.
+<b>Modern Dark-Mode UI:</b> Clean, visually stunning design with a focus on usability and accessibility.
 Authentication & Landing: Secure signup/login pages double as stylish landing pages—with animated branding, feature highlights, and smooth transitions.
 Customizable Daily Habit Checklist:Add, edit, delete, and reorder daily tasks (with category badges). View Daily progress counter and percentage.
 
