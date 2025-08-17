@@ -17,9 +17,13 @@ Stats cards for Current Streak and Total Wins.
 Hover over days for completion details.
 
 <b>Responsive & Accessible:</b>
-
 Fluid layout on desktop, laptop, tablet, and mobile.
 Keyboard navigable and screen-reader ready.
+## ScreenShots
+<b>Login Page</b><br><img width="1828" height="806" alt="image" src="https://github.com/user-attachments/assets/b455a15e-d2a4-4f6b-a666-567d5b53837a" />
+
+<b>Dashboard<b><br>-<img width="868" height="848" alt="image" src="https://github.com/user-attachments/assets/766ae8a0-8781-4cd9-8ffc-92bc9726a0d1" />
+
 
 ## Tech Stack
 React 19 with Framer Motion
