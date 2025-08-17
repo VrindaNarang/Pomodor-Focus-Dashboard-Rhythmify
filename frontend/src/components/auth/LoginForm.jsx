@@ -171,7 +171,7 @@ const LoginForm = ({ onToggleAuth }) => {
             <div className="w-full border-t border-gray-600" />
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-gray-800 text-gray-400">New to FocusFlame?</span>
+            <span className="px-2 bg-gray-800 text-gray-400">New to Rhythmify?</span>
           </div>
         </div>
 

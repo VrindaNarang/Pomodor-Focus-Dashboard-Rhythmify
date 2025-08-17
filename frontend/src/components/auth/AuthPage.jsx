@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import LoginForm from './LoginForm';
 import SignupForm from './SignupForm';
 import AuthHero from './AuthHero';
-import { Flame, Zap } from 'lucide-react';
+import { Target, Zap } from 'lucide-react';
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -87,10 +87,10 @@ const AuthPage = () => {
                 }}
                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
               >
-                <Flame className="w-8 h-8 text-white" />
+                <Target className="w-8 h-8 text-white" />
               </motion.div>
               <h1 className="text-4xl font-black bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent">
-                FocusFlame
+                Rhythmify
               </h1>
               <motion.div 
                 className="p-3 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl shadow-lg"

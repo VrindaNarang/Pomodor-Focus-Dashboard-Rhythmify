@@ -1,10 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Flame, Zap, Clock, Calendar, Target, TrendingUp } from 'lucide-react';
+import { Target, Zap, Clock, Calendar, TrendingUp } from 'lucide-react';
 
 const AuthHero = () => {
   const features = [
-    { icon: Flame, text: "Track study streaks", color: "text-orange-400" },
+    { icon: Target, text: "Track study streaks", color: "text-orange-400" },
     { icon: TrendingUp, text: "Personalized study plans", color: "text-green-400" },
     { icon: Calendar, text: "Motivational progress calendar", color: "text-blue-400" },
     { icon: Clock, text: "Customizable Pomodoro sessions", color: "text-purple-400" }
@@ -34,10 +34,10 @@ const AuthHero = () => {
             }}
             transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
           >
-            <Flame className="w-12 h-12 text-white" />
+            <Target className="w-12 h-12 text-white" />
           </motion.div>
           <h1 className="text-6xl font-black bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent">
-            FocusFlame
+            Rhythmify
           </h1>
           <motion.div 
             className="p-4 bg-gradient-to-br from-orange-500 to-orange-600 rounded-3xl shadow-2xl"

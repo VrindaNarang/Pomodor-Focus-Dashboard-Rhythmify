@@ -71,7 +71,7 @@ const SignupForm = ({ onToggleAuth }) => {
     
     if (result.success) {
       toast({
-        title: "Welcome to FocusFlame! 🔥",
+        title: "Welcome to Rhythmify! 🎯",
         description: "Your account has been created successfully. Let's start your productivity journey!",
       });
     } else {
@@ -87,7 +87,7 @@ const SignupForm = ({ onToggleAuth }) => {
     <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm shadow-2xl">
       <CardHeader className="text-center pb-6">
         <CardTitle className="text-3xl font-bold text-white mb-2">
-          Join FocusFlame
+          Join Rhythmify
         </CardTitle>
         <p className="text-gray-400">Start your productivity journey today</p>
       </CardHeader>
