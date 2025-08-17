@@ -3,7 +3,6 @@ import PomodoroTimer from "./PomodoroTimer";
 import ProgressBar from "./ProgressBar";
 import StreakCalendar from "./StreakCalendar";
 import DailyTasks from "./DailyTasks";
-import TimerSettings from "./TimerSettings";
 import DashboardHeader from "./DashboardHeader";
 import { mockData } from "../utils/mockData";
 
@@ -13,7 +12,6 @@ const Dashboard = () => {
   const [dailyProgress, setDailyProgress] = useState(mockData.dailyProgress);
   const [streakData, setStreakData] = useState(mockData.streakData);
   const [dailyTasks, setDailyTasks] = useState(mockData.dailyTasks);
-  const [showSettings, setShowSettings] = useState(false);
 
   const completedTasks = dailyTasks.filter(task => task.completed).length;
   const allTasksComplete = completedTasks === dailyTasks.length;
@@ -54,20 +52,11 @@ const Dashboard = () => {
           </div>
           
           {/* Center Column - Timer */}
-          <div className="lg:col-span-4 flex flex-col items-center space-y-6">
-            {/* Timer Settings Above Timer */}
-            <div className="w-full">
-              <TimerSettings 
-                settings={timerSettings}
-                onSettingsChange={setTimerSettings}
-                isCompact={true}
-              />
-            </div>
-            
-            {/* Pomodoro Timer */}
+          <div className="lg:col-span-4 flex flex-col items-center justify-center">
             <PomodoroTimer 
               settings={timerSettings}
               currentSession={currentSession}
+              onSettingsChange={setTimerSettings}
               onSessionComplete={(sessionData) => {
                 setDailyProgress(prev => ({
                   ...prev,
