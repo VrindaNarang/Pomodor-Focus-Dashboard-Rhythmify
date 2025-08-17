@@ -3,7 +3,7 @@ import { Card } from "./ui/card";
 import { Progress } from "./ui/progress";
 import { Flame, Clock, Target, Trophy, CheckCircle } from "lucide-react";
 
-const ProgressBar = ({ dailyProgress, timerSettings, streakEligible }) => {
+const ProgressBar = ({ dailyProgress, timerSettings, streakEligible, totalTasks }) => {
   const targetSessions = timerSettings.dailyTarget;
   const completedSessions = dailyProgress.completedSessions;
   const progressPercentage = Math.min((completedSessions / targetSessions) * 100, 100);
@@ -92,7 +92,7 @@ const ProgressBar = ({ dailyProgress, timerSettings, streakEligible }) => {
       {/* Progress Summary */}
       <div className="mt-4 p-3 bg-gray-700/30 rounded-lg border border-gray-600/30">
         <div className="text-center text-sm text-gray-300">
-          <span className="font-medium">Daily Target:</span> {targetHours}h {targetMinutes}m focus time & all 6 daily tasks
+          <span className="font-medium">Daily Target:</span> {targetHours}h {targetMinutes}m focus time & all {totalTasks} daily tasks
           {streakEligible && <span className="ml-2 text-green-400 font-bold">✅ Achieved!</span>}
         </div>
       </div>
