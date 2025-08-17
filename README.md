@@ -7,16 +7,16 @@ https://habit-hero-26.preview.emergentagent.com/
 Authentication & Landing: Secure signup/login pages double as stylish landing pages—with animated branding, feature highlights, and smooth transitions.
 Customizable Daily Habit Checklist:Add, edit, delete, and reorder daily tasks (with category badges). View Daily progress counter and percentage.
 
-Animated Pomodoro Timer:
+<b>Animated Pomodoro Timer:</b>
 Configurable timer presets (Standard, Deep Work, Quick Sprint) using a modal popup (gear icon).
 Optional ringing sound when session finishes.
 
-Streak Calendar Tracker:
+<b>Streak Calendar Tracker:</b>
 Month-view grid highlights days you met your Pomodoro target & all chosen habits.
 Stats cards for Current Streak and Total Wins.
 Hover over days for completion details.
 
-Responsive & Accessible:
+<b>Responsive & Accessible:</b>
 
 Fluid layout on desktop, laptop, tablet, and mobile.
 Keyboard navigable and screen-reader ready.
